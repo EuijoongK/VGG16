@@ -2,6 +2,8 @@
 #include "../include/datahandler/datahandler.h"
 
 int main(){
+
+    /*
     struct FeatureMap* input = load_input(
         "./export/lena.txt",
         512, 512, 3
@@ -36,4 +38,31 @@ int main(){
     fclose(fp);
     freeFeatureMap(input);
     freeKernel(kernel);
+    */
+
+   double test_arr[] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+   double kernel_weight[] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+   double kernel_bias[] = {0};
+
+   struct FeatureMap test;
+   test.row = 3;
+   test.col = 3;
+   test.channel = 1;
+   test.data = test_arr;
+
+   struct Kernel kernel;
+   kernel.row = 3;
+   kernel.col = 3;
+   kernel.channel = 1;
+   kernel.num = 1;
+   kernel.weight = kernel_weight;
+   kernel.bias = kernel_bias;
+
+   struct FeatureMap* output = Conv3D(&test, &kernel, 1, 1, 0, 0);
+
+   for(int i = 0; i < output -> row; ++i){
+    for(int j = 0; j < output -> col; ++j){
+        printf("%lf\n", *(output -> data + i * output -> col + j));
+    }
+   }
 }
