@@ -39,5 +39,10 @@ add_library(model STATIC ${MODEL_LIB_SRC})
 target_link_libraries(model layer featuremap)
 set_target_properties(model PROPERTIES ARCHIVE_OUTPUT_DIRECTORY lib)
 
-add_executable(test test.c)
-target_link_libraries(test featuremap layer model datahandler)
+add_executable(test_0116 test/test_0116.c)
+target_link_libraries(test_0116 featuremap layer model datahandler)
+set_target_properties(test_0116 PROPERTIES ARCHIVE_OUTPUT_DIRECTORY bin)
+
+add_executable(test_padding test/test_padding.c)
+target_link_libraries(test_padding featuremap layer model datahandler)
+set_target_properties(test_padding PROPERTIES ARCHIVE_OUTPUT_DIRECTORY bin)

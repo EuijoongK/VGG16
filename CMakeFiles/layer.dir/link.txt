@@ -1,0 +1,2 @@
+/usr/bin/ar qc lib/liblayer.a CMakeFiles/layer.dir/src/layer/conv_layer.c.o CMakeFiles/layer.dir/src/layer/zeropadding_layer.c.o CMakeFiles/layer.dir/src/layer/maxpool_layer.c.o CMakeFiles/layer.dir/src/layer/fc_layer.c.o
+/usr/bin/ranlib lib/liblayer.a

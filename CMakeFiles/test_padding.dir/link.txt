@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/test_padding.dir/test/test_padding.c.o -o test_padding  lib/libfeaturemap.a lib/liblayer.a lib/libmodel.a lib/libdatahandler.a lib/liblayer.a lib/libfeaturemap.a 
