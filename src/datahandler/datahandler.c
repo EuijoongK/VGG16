@@ -73,3 +73,35 @@ struct FeatureMap* load_input(
 
     return output;
 }
+
+struct FeatureMap* load_input_binary(
+    char* file_name,
+    uint32_t input_row,
+    uint32_t input_col,
+    uint32_t input_channel
+){
+    FILE* fp = fopen(file_name, "rb");
+    uint8_t* buf = (uint8_t*)malloc(input_row * input_col * input_channel * sizeof(uint8_t));
+    double* data = (double*)malloc(input_row * input_col * input_channel * sizeof(double));
+
+    fread(buf, sizeof(uint8_t), input_row * input_col * input_channel, fp);
+
+    uint32_t i, j, k;
+    for(i = 0; i < input_channel; ++i){
+        for(j = 0; j < input_row; ++j){
+            for(k = 0; k < input_col; ++k){
+                *(data + i * input_row * input_col + j * input_col + k) = 
+                    (double)(*(buf + i * input_row * input_col + j * input_col + k));
+            }
+        }
+    }
+
+    struct FeatureMap* output = (struct FeatureMap*)malloc(sizeof(struct FeatureMap));
+    output -> row = input_row;
+    output -> col = input_col;
+    output -> channel = input_channel;
+    output -> data = data;
+
+    free(buf);
+    return output;
+}

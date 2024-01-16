@@ -1,2 +1,0 @@
-/usr/bin/ar qc lib/libdatahandler.a CMakeFiles/datahandler.dir/src/datahandler/datahandler.c.o
-/usr/bin/ranlib lib/libdatahandler.a

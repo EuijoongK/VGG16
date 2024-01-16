@@ -19,4 +19,11 @@ struct FeatureMap* load_input(
     uint32_t input_channel
 );
 
+struct FeatureMap* load_input_binary(
+    char* file_name,
+    uint32_t input_row,
+    uint32_t input_col,
+    uint32_t input_channel
+);
+
 #endif

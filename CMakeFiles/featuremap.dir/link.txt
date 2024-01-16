@@ -1,2 +1,0 @@
-/usr/bin/ar qc lib/libfeaturemap.a CMakeFiles/featuremap.dir/src/featuremap/featuremap.c.o
-/usr/bin/ranlib lib/libfeaturemap.a

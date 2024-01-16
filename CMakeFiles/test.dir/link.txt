@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/test.dir/test/test.c.o -o test  lib/libfeaturemap.a lib/liblayer.a lib/libmodel.a lib/libdatahandler.a lib/liblayer.a lib/libfeaturemap.a 

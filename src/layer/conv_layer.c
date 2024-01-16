@@ -74,39 +74,39 @@ struct FeatureMap* Conv3D(
     struct FeatureMap* padded_input = Zeropadding(input, padding_num);
 
     uint32_t output_sz = output_row * output_col;
-	uint32_t input_sz = (input_row + 2 * padding_num) * (input_col + 2 * padding_num);
+	uint32_t input_sz = (padded_input -> row) * (padded_input -> col);
 	uint32_t kernel_sz = kernel_row * kernel_col;
 
     double* output_data = (double*)malloc(output_row * output_col * output_channel * sizeof(double));
     
     uint32_t i, j, k, m, n;
     for(i = 0; i < kernel_num; ++i){
-        double* output_data_ptr = output_data + i * output_sz;
+        double* output_data_ch = output_data + i * output_sz;
         for(j = 0; j < output_row; ++j){
             for(k = 0; k < output_col; ++k){
                 double sum = kernel_bias[i];
                 for(n = 0; n < kernel_channel; ++n){
-                    const double* input_ptr = padded_input -> data + n * input_sz + 
-                                            j * (input_col + 2 * padding_num) * stride_row + k * stride_col;
-                    const double* kernel_ptr = kernel_weight + (i * kernel_channel + n) * kernel_sz;
-
-                    uint32_t p = 0, q = 0;
-                    for(; p < kernel_row; ++p){
+                    double* input_ptr = padded_input -> data + n * input_sz + 
+                                            j * (padded_input -> col) * stride_row + k * stride_col;
+                    double* kernel_ptr_ch = kernel_weight + i * kernel_channel * kernel_sz + 
+                                            n * kernel_sz;
+                    uint32_t p, q;
+                    for(p = 0; p < kernel_row; ++p){
                         for(q = 0; q < kernel_col - 3; q += 4){
-                            sum += input_ptr[p * (input_col + 2 * padding_num) + q] * kernel_ptr[p * kernel_col + q];
-                            sum += input_ptr[p * (input_col + 2 * padding_num) + q + 1] * kernel_ptr[p * kernel_col + q + 1];
-                            sum += input_ptr[p * (input_col + 2 * padding_num) + q + 2] * kernel_ptr[p * kernel_col + q + 2];
-                            sum += input_ptr[p * (input_col + 2 * padding_num) + q + 3] * kernel_ptr[p * kernel_col + q + 3];
+                            sum += (input_ptr[p * (padded_input -> col) + q] * kernel_ptr_ch[p * kernel_col + q]);
+                            sum += (input_ptr[p * (padded_input -> col) + q + 1] * kernel_ptr_ch[p * kernel_col + q + 1]);
+                            sum += (input_ptr[p * (padded_input -> col) + q + 2] * kernel_ptr_ch[p * kernel_col + q + 2]);
+                            sum += (input_ptr[p * (padded_input -> col) + q + 3] * kernel_ptr_ch[p * kernel_col + q + 3]);
                         }
                         for(; q < kernel_col; ++q){
-                            sum += input_ptr[p * (input_col + 2 * padding_num) + q] * kernel_ptr[p * kernel_col + q];
+                            sum += (input_ptr[p * (padded_input -> col) + q] * kernel_ptr_ch[p * kernel_col + q]);
                         }
                     }
                 }
                 if(relu_opt && (sum < 0)){
                     sum = 0;
                 }
-                output_data_ptr[j * output_col + k] = sum;
+                output_data_ch[j * output_col + k] = sum;
             }
         }
     }
