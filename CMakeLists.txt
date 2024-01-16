@@ -50,3 +50,7 @@ set_target_properties(test_padding PROPERTIES ARCHIVE_OUTPUT_DIRECTORY bin)
 add_executable(test_conv test/test_conv.c)
 target_link_libraries(test_conv featuremap layer model datahandler)
 set_target_properties(test_conv PROPERTIES ARCHIVE_OUTPUT_DIRECTORY bin)
+
+add_executable(test_load test/test_load.c)
+target_link_libraries(test_load featuremap layer model datahandler)
+set_target_properties(test_load PROPERTIES ARCHIVE_OUTPUT_DIRECTORY bin)

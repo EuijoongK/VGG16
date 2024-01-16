@@ -2,18 +2,20 @@
 #include "../include/datahandler/datahandler.h"
 
 int main(){
-    double kernel_weight[9] = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
+    double kernel_weight[27] = {-1, 0, 1, -2, 0, 2, -1, 0, 1,
+                                -1, 0, 1, -2, 0, 2, -1, 0, 1,
+                                -1, 0, 1, -2, 0, 2, -1, 0, 1};
     double kernel_bias[] = {0, 0, 0};
     struct Kernel kernel;
     kernel.row = 3;
     kernel.col = 3;
-    kernel.channel = 1;
+    kernel.channel = 3;
     kernel.num = 1;
     kernel.weight = kernel_weight;
     kernel.bias = kernel_bias;
 
     printf("Loading input file...\n");
-    struct FeatureMap* input = load_input_binary("./export/lena.bin", 512, 512, 1);
+    struct FeatureMap* input = load_input_binary("./export/lena.bin", 512, 512, 3);
     printf("Input file loaded!\n");
 
     printf("Applying convolution...\n");
@@ -35,20 +37,23 @@ int main(){
     uint32_t col = output -> col;
     uint32_t channel = output -> channel;
 
-    unsigned char* buf = (unsigned char*)malloc(sizeof(unsigned char) * row * col);
+    uint8_t* buf = (uint8_t*)malloc(sizeof(uint8_t) * 1);
 
     for(i = 0; i < row; ++i){
         for(j = 0; j < col; ++j){
             uint8_t data_r = (uint8_t)(*(output -> data + i * col + j));
-            //unsigned char data_g = (unsigned char)(*(output -> data + row * col + i * col + j));
-            //unsigned char data_b = (unsigned char)(*(output -> data + row * col * 2 + i * col + j));
-            *(buf + i * col + j) = data_r;
-            fwrite(buf + i * col + j, sizeof(uint8_t), 1, fp);
-            //fwrite(data_g, sizeof(uint8_t), 1, fp);
-            //fwrite(data_b, sizeof(uint8_t), 1, fp);
+            //uint8_t data_g = (uint8_t)(*(output -> data + i * col + j + row * col));
+            //uint8_t data_b = (uint8_t)(*(output -> data + i * col + j + row * col * 2));
+
+            *buf = data_r;
+            //*(buf + 1) = data_g;
+            //*(buf + 2) = data_b;
+
+            fwrite(buf, sizeof(uint8_t), 1, fp);
         }
     }
 
+    free(buf);
     fclose(fp);
     printf("Memory free for input file...\n");
     freeFeatureMap(input);
