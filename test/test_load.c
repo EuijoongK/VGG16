@@ -7,13 +7,18 @@ int main(){
 
     uint32_t i, j, k;
     uint8_t flag = 0;
-    for(i = 0; i < input1 -> channel; ++i){
-        for(j = 0; j < input1 -> row; ++j){
-            for(k = 0; k < input1 -> col; ++k){
-                double val1 = *(input1 -> data + i * input1 -> row * input1 -> col +
-                                j * input1 -> col + k);
-                double val2 = *(input2 -> data + i * input2 -> row * input2 -> col +
-                                j * input2 -> col + k);
+
+    uint32_t channel = input1 -> channel;
+    uint32_t row = input1 -> row;
+    uint32_t col = input1 -> col;
+
+    for(i = 0; i < channel; ++i){
+        for(j = 0; j < row; ++j){
+            for(k = 0; k < col; ++k){
+                double val1 = *(input1 -> data + i * row * col +
+                                j * col + k);
+                double val2 = *(input2 -> data + i * row * col +
+                                j * col + k);
                 if(val1 != val2){
                     flag = 1;
                     printf("%lf != %lf\n", val1, val2);

@@ -3,46 +3,28 @@
 
 int main(){
 
-    struct FeatureMap* input = load_input(
-        "./export/lena.txt",
+    struct FeatureMap* input = load_input_binary(
+        "./export/lena.bin",
         512, 512, 3
     );
-    struct Kernel* kernel = load_con_kernel(
-        "./export/first_conv_layer_weight.txt",
-        "./export/first_conv_layer_bias.txt",
-        3, 3, 3, 64
-    );
 
-    FILE* fp = fopen("./export/first_convolution.txt", "w");
-    if (fp == NULL) {
-        fprintf(stderr, "Unable to open file.\n");
-        return 1;
-    }
+    FILE* fp = fopen("./export/test.txt", "w");
 
-    struct FeatureMap* output = Conv3D(
-        input,
-        kernel,
-        1,
-        1,
-        1,
-        0
-    );
+    uint32_t row, col, channel;
 
-    uint32_t i, j, k, m;
-    uint32_t output_row = output -> row;
-    uint32_t output_col = output -> col;
-    uint32_t output_channel = output -> channel;
+    row = input -> row;
+    col = input -> col;
+    channel = input -> channel;
 
-    for(i = 0; i < output_channel; ++i){
-        for(j = 0; j < output_row; ++j){
-            for(k = 0; k < output_col; ++k){
-                fprintf(fp, "%lf\n", *(output -> data + i * output_row * output_col + j * output_col + k));
+    uint32_t i, j, k;
+    for(i = 0; i < channel; ++i){
+        for(j = 0; j < row; ++j){
+            for(k = 0; k < col; ++k){
+                fprintf(fp, "%d\n", (int)(*(input -> data + i * row * col + j * col + k)));
             }
         }
     }
 
     fclose(fp);
     freeFeatureMap(input);
-    freeFeatureMap(output);
-    freeKernel(kernel);
 }
