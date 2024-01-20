@@ -2,8 +2,10 @@
 #include "../include/datahandler/datahandler.h"
 
 int main(){
+    printf("Loding First input...\n");
     struct FeatureMap* input1 = load_input_binary("./export/lena.bin", 512, 512, 3);
-    struct FeatureMap* input2 = load_input("./export/lena.txt", 512, 512, 3);
+    printf("Loading Second input...\n");
+    struct FeatureMap* input2 = load_input_txt("./export/lena_RGB.txt", 512, 512, 3);
 
     uint32_t i, j, k;
     uint8_t flag = 0;

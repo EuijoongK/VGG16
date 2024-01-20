@@ -18,12 +18,11 @@ void calculate_conv_sz(
 
 double patch_convolution(
     const double* input_data,
-    const double* kernel_params,
+    const double* kernel_data,
     const uint32_t input_row,
     const uint32_t input_col,
     const uint32_t kernel_row,
-    const uint32_t kernel_col,
-    const double bias
+    const uint32_t kernel_col
 );
 
 struct FeatureMap* Conv3D(

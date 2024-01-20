@@ -5,7 +5,7 @@ int main(){
     double kernel_weight[27] = {-1, 0, 1, -2, 0, 2, -1, 0, 1,
                                 -1, 0, 1, -2, 0, 2, -1, 0, 1,
                                 -1, 0, 1, -2, 0, 2, -1, 0, 1};
-    double kernel_bias[] = {0, 0, 0};
+    double kernel_bias[] = {0};
     struct Kernel kernel;
     kernel.row = 3;
     kernel.col = 3;

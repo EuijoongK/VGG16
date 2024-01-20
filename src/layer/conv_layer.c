@@ -1,4 +1,7 @@
 #include "../../include/layer/conv_layer.h"
+#include <pthread.h>
+
+#define THREAD_NUM 2
 
 void calculate_conv_sz(
     const uint32_t input_row,
@@ -18,17 +21,16 @@ void calculate_conv_sz(
 
 double patch_convolution(
     const double* input_data,
-    const double* kernel_params,
+    const double* kernel_data,
     const uint32_t input_row,
     const uint32_t input_col,
     const uint32_t kernel_row,
-    const uint32_t kernel_col,
-    const double bias
+    const uint32_t kernel_col
 ){
-    double sum = bias;
+    double sum = 0;
     for(uint32_t i = 0; i < kernel_row; ++i){
         const double* input_ptr = input_data + i * input_col;
-        const double* kernel_ptr = kernel_params + i * kernel_col;
+        const double* kernel_ptr = kernel_data + i * kernel_col;
 
         uint32_t j = 0;
         for(; j < kernel_col - 3; j += 4){
@@ -119,4 +121,27 @@ struct FeatureMap* Conv3D(
 
     freeFeatureMap(padded_input);
     return output;
+}
+
+// in progress
+struct FeatureMap* Conv3D_thread(
+    const struct FeatureMap* input,
+    const struct Kernel* kernel,
+    const uint32_t stride_row,
+    const uint32_t stride_col,
+    const uint32_t padding_num,
+    const uint8_t relu_opt
+){
+    uint32_t input_row = input -> row;
+    uint32_t input_col = input -> col;
+    uint32_t kernel_row = kernel -> row;
+    uint32_t kernel_col = kernel -> col;
+
+    uint32_t output_row, output_col;
+    calculate_conv_sz(input_row, input_col, kernel_row, kernel_col,
+                    stride_row, stride_col, padding_num, &output_row, &output_col);
+    uint32_t output_channel = kernel -> num;
+
+    pthread_t tid[THREAD_NUM];
+
 }
