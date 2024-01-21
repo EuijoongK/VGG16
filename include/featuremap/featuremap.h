@@ -10,7 +10,7 @@ struct FeatureMap{
     uint32_t row;
     uint32_t col;
     uint32_t channel;
-    double* data;
+    float* data;
 };
 
 struct Kernel{
@@ -18,20 +18,20 @@ struct Kernel{
     uint32_t col;
     uint32_t num;
     uint32_t channel;
-    double* weight;
-    double* bias;
+    float* weight;
+    float* bias;
 };
 
 struct arr1D{
     uint32_t num_element;
-    double* data;
+    float* data;
 };
 
 struct kernel1D{
     uint32_t num_element;
     uint32_t num_kernel;
-    double* data;
-    double* bias;
+    float* data;
+    float* bias;
 };
 
 void summary_featuremap(const struct FeatureMap* input);

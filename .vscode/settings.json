@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "datahandler.h": "c"
+        "datahandler.h": "c",
+        "zeropadding_layer.h": "c"
     }
 }

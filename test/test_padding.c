@@ -9,7 +9,7 @@ int main(){
     uint32_t channel = 3;
     size_t sz = row * col * channel;
 
-    double* arr = (double*)malloc(sizeof(double) * sz);
+    float* arr = (float*)malloc(sizeof(float) * sz);
     for(uint32_t i = 0; i < sz; ++i){
         *(arr + i) = i + 1;
     }

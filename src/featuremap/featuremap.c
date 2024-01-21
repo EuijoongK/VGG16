@@ -27,7 +27,7 @@ void get_data(const struct FeatureMap* input){
     uint32_t input_col = input -> col;
     uint32_t input_channel = input -> channel;
     uint32_t input_sz = input_row * input_col;
-    double* input_data = input -> data;
+    float* input_data = input -> data;
 
     uint32_t i, j, k;
     for(i = 0; i < input_channel; ++i){
@@ -49,19 +49,19 @@ struct FeatureMap* Zeropadd(
     uint32_t output_row = featuremap -> row + 2 * padding_num;
     uint32_t output_col = featuremap -> col + 2 * padding_num;
     uint32_t output_channel = featuremap -> channel;
-    double* output_data = (double*)malloc(output_row * output_col * output_channel * sizeof(double));
-    memset(output_data, 0, output_row * output_col * output_channel * sizeof(double));
+    float* output_data = (float*)malloc(output_row * output_col * output_channel * sizeof(float));
+    memset(output_data, 0, output_row * output_col * output_channel * sizeof(float));
 
     uint32_t featuremap_sz = featuremap -> row * featuremap -> col;
     uint32_t output_sz = output_row * output_col;
     
     uint32_t i, j;
     for (i = 0; i < featuremap -> channel; ++i) {
-        double* data_ptr = featuremap -> data + i * featuremap_sz;
-        double* output_data_ptr = output_data + i * output_sz;
+        float* data_ptr = featuremap -> data + i * featuremap_sz;
+        float* output_data_ptr = output_data + i * output_sz;
         for (j = 0; j < featuremap -> row; ++j) {
             memcpy(output_data_ptr + (j + padding_num) * output_col + padding_num, data_ptr + j * featuremap -> col,
-                sizeof(double) * featuremap -> col);
+                sizeof(float) * featuremap -> col);
         }
     }
 

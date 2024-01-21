@@ -25,28 +25,28 @@ struct FeatureMap* Maxpool(
     uint32_t input_row = input -> row;
     uint32_t input_col = input -> col;
     uint32_t input_channel = input -> channel;
-    const double* input_data = input -> data;
+    const float* input_data = input -> data;
     uint32_t output_row, output_col;
     calculate_maxpool_sz(input_row, input_col, kernel_row, kernel_col,
                         stride_row, stride_col, &output_row, &output_col);
     uint32_t output_channel = input_channel;
-    double* output_data = (double*)malloc(output_row * output_col * output_channel * sizeof(double));
-    double* arr = (double*)malloc(kernel_row * kernel_col * sizeof(double));
+    float* output_data = (float*)malloc(output_row * output_col * output_channel * sizeof(float));
+    float* arr = (float*)malloc(kernel_row * kernel_col * sizeof(float));
 
     uint32_t input_sz = input_row * input_col;
     uint32_t output_sz = output_row * output_col;
     uint32_t kernel_sz = kernel_row * kernel_col;
     uint32_t i, j, k, m;
     for(i = 0; i < input_channel; ++i){
-        const double* input_data_ptr = input_data + i * input_sz;
-        double* output_data_ptr = output_data + i * output_sz;
+        const float* input_data_ptr = input_data + i * input_sz;
+        float* output_data_ptr = output_data + i * output_sz;
         for(j = 0; j < output_row; ++j){
             for(k = 0; k < output_col; ++k){
                 for(m = 0; m < kernel_row; ++m){
                     memcpy(arr + m * kernel_col, input_data_ptr + (j * stride_row + m) * input_col + k * stride_col,
-                        kernel_row * kernel_col * sizeof(double));
+                        kernel_row * kernel_col * sizeof(float));
                 }
-                double max_value = 0;
+                float max_value = 0;
                 for(uint32_t n = 0; n < kernel_sz; ++n){
                     if(max_value < arr[n]){
                         max_value = arr[n];

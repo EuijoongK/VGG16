@@ -16,9 +16,9 @@ void calculate_conv_sz(
     uint32_t* output_col
 );
 
-double patch_convolution(
-    const double* input_data,
-    const double* kernel_data,
+float patch_convolution(
+    const float* input_data,
+    const float* kernel_data,
     const uint32_t input_row,
     const uint32_t input_col,
     const uint32_t kernel_row,

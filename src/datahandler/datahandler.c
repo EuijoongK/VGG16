@@ -11,7 +11,7 @@ struct Kernel* load_conv_kernel_txt(
 ){
     char buffer[256];
     FILE* fp = fopen(file_weight, "r");
-    double* weight = (double*)malloc(kernel_num * kernel_channel * kernel_row * kernel_col * sizeof(double));
+    float* weight = (float*)malloc(kernel_num * kernel_channel * kernel_row * kernel_col * sizeof(float));
 
     uint32_t i, j, k, m;
     for(i = 0; i < kernel_num; ++i){
@@ -27,7 +27,7 @@ struct Kernel* load_conv_kernel_txt(
     }
     
     FILE* fp2 = fopen(file_bias, "r");
-    double* bias = (double*)malloc(kernel_num * sizeof(double));
+    float* bias = (float*)malloc(kernel_num * sizeof(float));
     for(i = 0; i < kernel_num; ++i){
         fgets(buffer, sizeof(buffer), fp2);
         *(bias + i) = strtod(buffer, NULL);
@@ -55,7 +55,7 @@ struct FeatureMap* load_input_txt(
 ){
     char buffer[256];
     FILE* fp = fopen(file_name, "r");
-    double* data = (double*)malloc(input_row * input_col * input_channel * sizeof(double));
+    float* data = (float*)malloc(input_row * input_col * input_channel * sizeof(float));
 
     uint32_t i, j, k;
     for(i = 0; i < input_channel; ++i){
@@ -86,22 +86,22 @@ struct Kernel* load_conv_kernel_binary(
     uint32_t kernel_num
 ){
     uint32_t size = kernel_row * kernel_col;
-    double* weight = (double*)malloc(size * kernel_channel * kernel_num * sizeof(double));
-    double* buf = (double*)malloc(size * kernel_channel * kernel_num * sizeof(double));
-    double* bias = (double*)malloc(kernel_num * sizeof(double));
+    float* weight = (float*)malloc(size * kernel_channel * kernel_num * sizeof(float));
+    float* buf = (float*)malloc(size * kernel_channel * kernel_num * sizeof(float));
+    float* bias = (float*)malloc(kernel_num * sizeof(float));
 
     FILE* fp = fopen(file_weight, "rb");
-    fread((void*)buf, sizeof(double), size * kernel_channel * kernel_num, fp);
+    fread((void*)buf, sizeof(float), size * kernel_channel * kernel_num, fp);
     fclose(fp);
 
     fp = fopen(file_bias, "rb");
-    fread(bias, sizeof(double), kernel_num, fp);
+    fread(bias, sizeof(float), kernel_num, fp);
     fclose(fp);
 
     uint32_t i, j, k, m;
     for(i = 0; i < kernel_num; ++i){
-        double* kernel_weight = weight + i * kernel_channel * size;
-        double* current_kernel = buf + i * kernel_channel * size;
+        float* kernel_weight = weight + i * kernel_channel * size;
+        float* current_kernel = buf + i * kernel_channel * size;
         for(j = 0; j < kernel_row; ++j){
             for(k = 0; k < kernel_col; ++k){
                 for(m = 0; m < kernel_channel; ++m){
@@ -132,7 +132,7 @@ struct FeatureMap* load_input_binary(
 ){
     FILE* fp = fopen(file_name, "rb");
     uint8_t* buf = (uint8_t*)malloc(input_row * input_col * input_channel * sizeof(uint8_t));
-    double* data = (double*)malloc(input_row * input_col * input_channel * sizeof(double));
+    float* data = (float*)malloc(input_row * input_col * input_channel * sizeof(float));
 
     fread((void*)buf, sizeof(uint8_t), input_row * input_col * input_channel, fp);
 
@@ -141,12 +141,12 @@ struct FeatureMap* load_input_binary(
     uint32_t i, j, k;
     for(i = 0; i < input_row; ++i){
         for(j = 0; j < input_col; ++j){
-            //*(data + i * input_col + j) = (double)(*(buf + i * 3 * input_col + 3 * j));
-            //*(data + i * input_col + j + size) = (double)(*(buf + i * 3 * input_col + 3 * j + 1));
-            //*(data + i * input_col + j + size * 2) = (double)(*(buf + i * 3 * input_col + 3 * j + 2));
+            //*(data + i * input_col + j) = (float)(*(buf + i * 3 * input_col + 3 * j));
+            //*(data + i * input_col + j + size) = (float)(*(buf + i * 3 * input_col + 3 * j + 1));
+            //*(data + i * input_col + j + size * 2) = (float)(*(buf + i * 3 * input_col + 3 * j + 2));
             
             for(k = 0; k < input_channel; ++k){
-                *(data + i * input_col + j + k * size) = (double)(*(buf +
+                *(data + i * input_col + j + k * size) = (float)(*(buf +
                     i * input_channel * input_col + j * input_channel + k));
             }
             

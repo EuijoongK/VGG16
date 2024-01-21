@@ -17,9 +17,9 @@ int main(){
     for(i = 0; i < channel; ++i){
         for(j = 0; j < row; ++j){
             for(k = 0; k < col; ++k){
-                double val1 = *(input1 -> data + i * row * col +
+                float val1 = *(input1 -> data + i * row * col +
                                 j * col + k);
-                double val2 = *(input2 -> data + i * row * col +
+                float val2 = *(input2 -> data + i * row * col +
                                 j * col + k);
                 if(val1 != val2){
                     flag = 1;
