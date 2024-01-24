@@ -25,22 +25,23 @@ float patch_convolution(
     const uint32_t input_row,
     const uint32_t input_col,
     const uint32_t kernel_row,
-    const uint32_t kernel_col
+    const uint32_t kernel_col,
+    const uint32_t channel,
+    const uint32_t bias
 ){
-    float sum = 0;
-    for(uint32_t i = 0; i < kernel_row; ++i){
-        const float* input_ptr = input_data + i * input_col;
-        const float* kernel_ptr = kernel_data + i * kernel_col;
+    float sum = bias;
+    float* input_ptr;
+    float* kernel_ptr;
 
-        uint32_t j = 0;
-        for(; j < kernel_col - 3; j += 4){
-            sum += (input_ptr[j] * kernel_ptr[j] +
-                input_ptr[j + 1] * kernel_ptr[j + 1] +
-                input_ptr[j + 2] * kernel_ptr[j + 2] +
-                input_ptr[j + 3] * kernel_ptr[j + 3]);
-        }
-        for(; j < kernel_col; ++j){
-            sum += input_ptr[j] * kernel_ptr[j];
+    uint32_t i, j, k;
+
+    for(i = 0; i < kernel_row; ++i){
+        for(j = 0; j < kernel_col; ++j){
+            for(k = 0; k < channel; ++k){
+                input_ptr = input_data + i * input_col * channel + j * channel + k;
+                kernel_ptr = kernel_data + i * kernel_col * channel + j * channel + k;
+                sum += ((*input_ptr) * (*kernel_ptr));
+            }
         }
     }
     return sum;
@@ -110,6 +111,71 @@ struct FeatureMap* Conv3D(
                     sum = 0;
                 }
                 *(output_data_ch + j * output_col + k) = sum;
+            }
+        }
+    }
+
+    struct FeatureMap* output = (struct FeatureMap*)malloc(sizeof(struct FeatureMap));
+    output -> row = output_row;
+    output -> col = output_col;
+    output -> channel = output_channel;
+    output -> data = output_data;
+
+    freeFeatureMap(padded_input);
+    return output;
+}
+
+struct FeatureMap* Conv3D2(
+    const struct FeatureMap* input,
+    const struct Kernel* kernel,
+    const uint32_t stride_row,
+    const uint32_t stride_col,
+    const uint32_t padding_num,
+    const uint8_t relu_opt
+){
+    uint32_t output_row, output_col;
+    uint32_t output_channel = kernel -> num;
+    uint32_t input_row = input -> row;
+    uint32_t input_col = input -> col;
+    uint32_t input_channel = input -> channel;
+    
+    uint32_t kernel_row = kernel -> row;
+    uint32_t kernel_col = kernel -> col;
+    uint32_t kernel_channel = kernel -> channel;
+    uint32_t kernel_num = kernel -> num;
+
+    float* input_data = input -> data;
+    float* kernel_weight = kernel -> weight;
+    float* kernel_bias = kernel -> bias;
+
+    calculate_conv_sz(input_row, input_col, kernel_row, kernel_col, 
+                    stride_row, stride_col, padding_num, &output_row, &output_col);
+    
+    struct FeatureMap* padded_input = Zeropadding2(input, padding_num);
+
+    uint32_t output_sz = output_row * output_col;
+	uint32_t input_sz = (padded_input -> row) * (padded_input -> col);
+	uint32_t kernel_sz = kernel_row * kernel_col;
+
+    float* output_data = (float*)malloc(output_row * output_col * output_channel * sizeof(float));
+    
+    uint32_t i, j, k, m, n;
+
+    for(i = 0; i < kernel_num; ++i){
+        float* current_kernel_weight = kernel_weight + i * kernel_sz * kernel_channel;
+        float current_kernel_bias = *(kernel_bias + i);
+        for(j = 0; j < output_row; ++j){
+            for(k = 0; k < output_col; ++k){
+                *(output_data + j * output_col * output_channel + k * output_channel + i) = patch_convolution(
+                    padded_input -> data + j * stride_row * (padded_input -> col) * input_channel + k * stride_col * input_channel,
+                    current_kernel_weight,
+                    input_row,
+                    input_col,
+                    kernel_row,
+                    kernel_col,
+                    input_channel,
+                    current_kernel_bias
+                );
             }
         }
     }

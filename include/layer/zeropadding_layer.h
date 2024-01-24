@@ -8,4 +8,9 @@ struct FeatureMap* Zeropadding(
     const uint32_t padding_num
 );
 
+struct FeatureMap* Zeropadding2(
+    const struct FeatureMap* input,
+    const uint32_t padding_num
+);
+
 #endif

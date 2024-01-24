@@ -7,3 +7,11 @@ struct FeatureMap* Zeropadding(
     struct FeatureMap* output = Zeropadd(input, padding_num);
     return output;
 }
+
+struct FeatureMap* Zeropadding2(
+    const struct FeatureMap* input,
+    const uint32_t padding_num
+){
+    struct FeatureMap* output = Zeropadd2(input, padding_num);
+    return output;
+}

@@ -136,20 +136,13 @@ struct FeatureMap* load_input_binary(
 
     fread((void*)buf, sizeof(uint8_t), input_row * input_col * input_channel, fp);
 
-    uint32_t size = input_row * input_col;
-
     uint32_t i, j, k;
     for(i = 0; i < input_row; ++i){
         for(j = 0; j < input_col; ++j){
-            //*(data + i * input_col + j) = (float)(*(buf + i * 3 * input_col + 3 * j));
-            //*(data + i * input_col + j + size) = (float)(*(buf + i * 3 * input_col + 3 * j + 1));
-            //*(data + i * input_col + j + size * 2) = (float)(*(buf + i * 3 * input_col + 3 * j + 2));
-            
             for(k = 0; k < input_channel; ++k){
-                *(data + i * input_col + j + k * size) = (float)(*(buf +
-                    i * input_channel * input_col + j * input_channel + k));
+                *(data + i * input_col * input_channel + j * input_channel + k) = (float)(*(buf + i * input_col * input_channel +
+                    j * input_channel + k));
             }
-            
         }
     }
 

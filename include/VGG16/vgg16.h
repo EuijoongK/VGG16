@@ -4,4 +4,6 @@
 #include "../datahandler/datahandler.h"
 #include "../model/model.h"
 
+struct Model* load_vgg16();
+
 #endif

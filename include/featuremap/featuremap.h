@@ -36,9 +36,13 @@ struct kernel1D{
 
 void summary_featuremap(const struct FeatureMap* input);
 void summary_kernel(const struct Kernel* input);
-void get_data(const struct FeatureMap* input);
 
 struct FeatureMap* Zeropadd(
+    const struct FeatureMap* featuremap,
+    const uint32_t padding_num
+);
+
+struct FeatureMap* Zeropadd2(
     const struct FeatureMap* featuremap,
     const uint32_t padding_num
 );

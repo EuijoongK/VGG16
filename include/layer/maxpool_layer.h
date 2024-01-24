@@ -22,4 +22,21 @@ struct FeatureMap* Maxpool(
     const uint32_t stride_col
 );
 
+float get_max_value(
+    const float* ptr,
+    uint32_t row,
+    uint32_t col,
+    uint32_t channel,
+    uint32_t kernel_row,
+    uint32_t kernel_col
+);
+
+struct FeatureMap* Maxpool2(
+    const struct FeatureMap* input,
+    const uint32_t kernel_row,
+    const uint32_t kernel_col,
+    const uint32_t stride_row,
+    const uint32_t stride_col
+);
+
 #endif
