@@ -3,7 +3,7 @@
 #include "../include/layer/conv_layer.h"
 
 int main(){
-    struct FeatureMap* input = load_input_binary("../sample/lenaBGR.bin", 512, 512, 3);
+    struct FeatureMap* input = load_input_binary("../sample/lena.bin", 512, 512, 3);
 
     float weight[] = {-1, -1, -1,
                     0, 0, 0,
@@ -30,7 +30,7 @@ int main(){
         1, 1, 0, 0
     );
 
-    export_featuremap_binary("../sample/convBGR.bin", output);
+    export_featuremap_binary("../sample/test_conv.bin", output);
 
     freeFeatureMap(output);
     freeFeatureMap(input);

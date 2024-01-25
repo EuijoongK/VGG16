@@ -4,23 +4,23 @@ void add_input(
     struct Model* model,
     struct FeatureMap* input
 ){
-    model -> con_layer_list[0] = input;
-    model -> num_con_layer = 0;
+    model -> conv_layer_list[0] = input;
+    model -> num_conv_layer = 0;
     model -> num_fc_layer = 0;
     return;
 }
 
-void add_con_layer(
+void add_conv_layer(
     struct Model* model,
     struct Kernel* kernel
 ){
-    model -> num_con_layer++;
-    uint32_t index = model -> num_con_layer - 1;
-    model -> con_kernel_list[index] = kernel;
+    model -> num_conv_layer++;
+    uint32_t index = model -> num_conv_layer - 1;
+    model -> conv_kernel_list[index] = kernel;
     return;
 }
 
-void run_con_layer(
+void run_conv_layer(
     struct Model* model,
     const uint32_t index,
     const uint32_t stride_row,
@@ -28,11 +28,11 @@ void run_con_layer(
     const uint32_t padding_num,
     const uint32_t relu_opt
 ){
-    struct FeatureMap* input = model -> con_layer_list[index];
-    struct Kernel* kernel = model -> con_kernel_list[index];
+    struct FeatureMap* input = model -> conv_layer_list[index];
+    struct Kernel* kernel = model -> conv_kernel_list[index];
     struct FeatureMap* output = Conv3D(input, kernel, stride_row,
                                     stride_col, padding_num, relu_opt);
-    model -> con_layer_list[index + 1] = output;
+    model -> conv_layer_list[index + 1] = output;
     return;
 }
 
@@ -59,13 +59,13 @@ void run_fc_layer(
 }
 
 void run_model(struct Model* model){
-    const uint32_t num_con_layer = model -> num_con_layer;
+    const uint32_t num_conv_layer = model -> num_conv_layer;
     const uint32_t num_fc_layer = model -> num_fc_layer;
     uint32_t i;
-    for(i = 0; i < num_con_layer; ++i){
-        run_con_layer(model, i, 1, 1, 1, 1);
+    for(i = 0; i < num_conv_layer; ++i){
+        run_conv_layer(model, i, 1, 1, 1, 1);
     }
-    struct arr1D* flattened_layer = cvt_featuremap2arr1d(model -> con_layer_list[num_con_layer]);
+    struct arr1D* flattened_layer = cvt_featuremap2arr1d(model -> conv_layer_list[num_conv_layer]);
     model -> fc_layer_list[0] = flattened_layer;
     for(i = 0; i < num_fc_layer; ++i){
         run_fc_layer(model, i, 1);
@@ -78,9 +78,9 @@ struct arr1D* get_model_output(struct Model* model){
 }
 
 void freeModel(struct Model* model){
-    for(uint32_t i = 0; i < model -> num_con_layer; ++i){
-        free(model -> con_layer_list[i]);
-        free(model -> con_kernel_list[i]);
+    for(uint32_t i = 0; i < model -> num_conv_layer; ++i){
+        free(model -> conv_layer_list[i]);
+        free(model -> conv_kernel_list[i]);
     }
     for(uint32_t i = 0; i < model -> num_fc_layer; ++i){
         free(model -> fc_layer_list[i]);

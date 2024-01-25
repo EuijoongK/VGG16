@@ -4,11 +4,11 @@
 int main(){
 
     struct FeatureMap* input = load_input_binary(
-        "./export/lena.bin",
+        "../sample/conv3d_0125.bin",
         512, 512, 3
     );
 
-    FILE* fp = fopen("./export/test.txt", "w");
+    FILE* fp = fopen("../sample/lena_conv_torch_0125.txt", "w");
 
     uint32_t row, col, channel;
 
@@ -17,10 +17,11 @@ int main(){
     channel = input -> channel;
 
     uint32_t i, j, k;
-    for(i = 0; i < channel; ++i){
-        for(j = 0; j < row; ++j){
-            for(k = 0; k < col; ++k){
-                fprintf(fp, "%d\n", (int)(*(input -> data + i * row * col + j * col + k)));
+
+    for(i = 0; i < row; ++i){
+        for(j = 0; j < col; ++j){
+            for(k = 0; k < channel; ++k){
+                fprintf(fp, "%d\t", (int)(*(input -> data + i * col * channel + j * channel + k)));
             }
         }
     }

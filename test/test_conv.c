@@ -2,9 +2,9 @@
 #include "../include/datahandler/datahandler.h"
 
 int main(){
-    float kernel_weight[27] = {-1, 0, 1, -2, 0, 2, -1, 0, 1,
-                                -1, 0, 1, -2, 0, 2, -1, 0, 1,
-                                -1, 0, 1, -2, 0, 2, -1, 0, 1};
+    float kernel_weight[27] = {-1, -1, -1, 0, 0, 0, 1, 1, 1,
+                                -2, -2, -2, 0, 0, 0, 2, 2, 2,
+                                -1, -1, -1, 0, 0, 0, 1, 1, 1};
     float kernel_bias[] = {0};
     struct Kernel kernel;
     kernel.row = 3;
@@ -15,17 +15,17 @@ int main(){
     kernel.bias = kernel_bias;
 
     printf("Loading input file...\n");
-    struct FeatureMap* input = load_input_binary("./export/lena.bin", 512, 512, 3);
+    struct FeatureMap* input = load_input_binary("../sample/lena.bin", 512, 512, 3);
     printf("Input file loaded!\n");
 
     printf("Applying convolution...\n");
-    struct FeatureMap* output = Conv3D(
-        input, &kernel, 1, 1, 1, 1
+    struct FeatureMap* output = Conv3D2(
+        input, &kernel, 1, 1, 0, 0
     );
     printf("Convolution finished!\n");
 
     printf("Output file open attempt...\n");
-    FILE* fp = fopen("./export/test_conv.bin", "wb");
+    FILE* fp = fopen("../sample/test_conv.bin", "wb");
     if (fp == NULL) {
         fprintf(stderr, "Unable to open file.\n");
         return 1;
