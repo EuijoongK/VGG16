@@ -15,6 +15,30 @@ void calculate_maxpool_sz(
     return;
 }
 
+
+float get_max_value(
+    const float* ptr,
+    uint32_t row,
+    uint32_t col,
+    uint32_t channel,
+    uint32_t kernel_row,
+    uint32_t kernel_col
+){
+    float ans = *ptr;
+    float buf;
+
+    uint32_t i, j;
+    for(i = 0; i < kernel_row; ++i){
+        for(j = 0; j < kernel_col; ++j){
+            buf = *(ptr + i * col * channel + j * channel);
+            if(buf > ans){
+                ans = buf;
+            }
+        }
+    }
+    return ans;
+}
+
 struct FeatureMap* Maxpool(
     const struct FeatureMap* input,
     const uint32_t kernel_row,
@@ -65,29 +89,6 @@ struct FeatureMap* Maxpool(
 
     free(arr);
     return output;
-}
-
-float get_max_value(
-    const float* ptr,
-    uint32_t row,
-    uint32_t col,
-    uint32_t channel,
-    uint32_t kernel_row,
-    uint32_t kernel_col
-){
-    float ans = *ptr;
-    float buf;
-
-    uint32_t i, j;
-    for(i = 0; i < kernel_row; ++i){
-        for(j = 0; j < kernel_col; ++j){
-            buf = *(ptr + i * col * channel + j * channel);
-            if(buf > ans){
-                ans = buf;
-            }
-        }
-    }
-    return ans;
 }
 
 struct FeatureMap* Maxpool2(

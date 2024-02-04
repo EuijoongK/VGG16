@@ -4,6 +4,8 @@
 #include "../featuremap/featuremap.h"
 #include "../layer/zeropadding_layer.h"
 
+#include <pthread.h>
+
 void calculate_conv_sz(
     const uint32_t input_row,
     const uint32_t input_col,

@@ -37,16 +37,6 @@ struct kernel1D{
 void summary_featuremap(const struct FeatureMap* input);
 void summary_kernel(const struct Kernel* input);
 
-struct FeatureMap* Zeropadd(
-    const struct FeatureMap* featuremap,
-    const uint32_t padding_num
-);
-
-struct FeatureMap* Zeropadd2(
-    const struct FeatureMap* featuremap,
-    const uint32_t padding_num
-);
-
 void freeFeatureMap(struct FeatureMap* featuremap);
 void freeKernel(struct Kernel* kernel);
 void freearr1D(struct arr1D* arr);

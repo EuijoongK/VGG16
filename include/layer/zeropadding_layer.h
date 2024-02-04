@@ -3,12 +3,12 @@
 
 #include "../featuremap/featuremap.h"
 
-struct FeatureMap* Zeropadding(
-    const struct FeatureMap* input,
+struct FeatureMap* Zeropadd(
+    const struct FeatureMap* featuremap,
     const uint32_t padding_num
 );
 
-struct FeatureMap* Zeropadding2(
+struct FeatureMap* Zeropadding(
     const struct FeatureMap* input,
     const uint32_t padding_num
 );
